@@ -1,6 +1,7 @@
 var express = require('express');
 var user_controller = require('./../controllers/user');
 var router = express.Router();
+var auth = require('./../middlewares/auth');
 
 // router.options("/*", (req, res, next) => {
 //   res.header('access-control-allow-origin', '*');
@@ -14,7 +15,8 @@ var router = express.Router();
 //   check('username').isAlphanumeric(),
 // ]
 
-/* GET home page. */
 router.post('/login', user_controller.login_post);
+
+router.get('/city', auth.verifyToken, user_controller.cities_get);
 
 module.exports = router;

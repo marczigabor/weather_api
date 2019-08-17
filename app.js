@@ -12,8 +12,7 @@ var userRouter = require('./routes/user');
 
 //var models = require('./models/index');
 var db = require('./models/index');
-var userRepository = require('./repository/user');
-const passwordHelper = require('./helper/password');
+const encryption = require('./helper/encryption');
 
 //var Sequelize = require('Sequelize');
 
@@ -33,9 +32,12 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+let apiVersion = "/api/v1";
+
 app.use('/', indexRouter);
-app.use('/weather', auth.verifyToken, weatherRouter);
-app.use('/user', userRouter);
+app.use(apiVersion + '/weather', auth.verifyToken, weatherRouter);
+app.use(apiVersion + '/user', userRouter);
 
 
 //database
@@ -53,10 +55,10 @@ app.use('/user', userRouter);
 db.sequelize.authenticate().then(() => {
   console.log("Success!");
 
-  db.sequelize.sync({ force: true }).then(()=>{
-    console.log("sync is done");
-    seed();
-  });
+  // db.sequelize.sync({ force: true }).then(()=>{
+  //   console.log("sync is done");
+  //   seed();
+  // });
  
 }).catch((err) => {
   console.log(err);
@@ -68,7 +70,7 @@ seed = async ()=>{
   await db.models.User.create(
     {
       userName: 'jobs@benestudio.co',
-      password:  passwordHelper.getHashString('password'),
+      password:  encryption.getHashString('password'),
       Cities: [
         {
           name: 'London',
@@ -85,9 +87,9 @@ seed = async ()=>{
     },    
   );
 
-  let u = await userRepository.findByLoginIncludeCities("jobs@benestudio.co");
+  // let u = await userRepository.findByLoginIncludeCities("jobs@benestudio.co");
 
-   console.log(u);
+  // console.log(u);
 
 }
 

@@ -1,23 +1,55 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { Client } = require('pg');
+const { check, validationResult } = require('express-validator');
+var userRepository = require('./../repository/user');
+const encryptionHelper = require('./../helper/encryption');
+const tokenHelper = require('./../helper/token');
 
-exports.login_post = async (req, res, next) => {
+const validationError= "Validation error: user or password not valid";
 
-    // const client = new Client();
-    // await client.connect();
-    // const result = await client.query('SELECT * from users');
-    // await client.end();
+const user = {
+    async login_post(req, res, next) {
 
-    res.send("ok");
-    // const user = await userRepository.getUserByUsername(req.body.username);
+        // check(req.body.userName).isEmail();
+        // check(req.body.password).isLength({ min: 5 });
+        // const errors = validationResult(req);
+        // if (!errors.isEmpty()) {
+        //   return res.status(422).json({ errors: errors.array() });
+        // }
     
-    // const isPasswordCorrect = await bcrypt.compare(req.body.password, user.password);
-    // if (isPasswordCorrect) {
-    //     console.log('Password is correct');
-    // } else {
-    //     console.log('Password is wrong');
-    // }
+        try{
+            const user = await userRepository.getUserByUsername(req.body.userName);
+    
+            if (user){
+    
+                if (await encryptionHelper.compare(req.body.password, user.password)){
+                    console.log('Password is correct');
+                } else {
+                    console.log('Password is wrong');
+                    throw new Error(validationError);
+                }
+            }else{
+                throw new Error(validationError);
+            }
+    
+            //req.session.userName = user.userName;
+            const token = tokenHelper.generateToken(user.userName);
+    
+            res.cookie('auth',token);
+            res.status(200).send({ token });
+        }catch (err){
+            next(err);
+        }
+    },
 
-    //return res.se ('login', { title: 'PicoBlog' });
-};
+    async cities_get(req, res, next){
+
+        try{
+            let userCities = await userRepository.findByLoginIncludeCities(req.userName);
+            res.send(userCities.Cities);
+        }catch (err){
+            next(err);
+        }
+    }
+}
+
+
+module.exports = user;
