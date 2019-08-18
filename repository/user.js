@@ -1,27 +1,37 @@
 var db = require('./../models/index');
 
-var userRepository = {};
+var userRepository = {
 
-userRepository.findByLoginIncludeCities = async (login) => {
+    async findByLoginIncludeCities(login){
     
-    let user = await db.models.User.findOne(
-      {
-        where: { userName: login },
-        include: [{ model: db.models.City}]
-      });
+        let user = await db.models.User.findOne(
+          {
+            where: { userName: login },
+            include: [{ model: db.models.City}]
+          });
+    
+        return user;
+    },
 
-    return user;
+    async getUserByUsername(login){
+    
+        let user = await db.models.User.findOne(
+          {
+            where: { userName: login },
+          });
+    
+        return user;
+    },
+
+    async addCity(userName, city){
+
+        let user = await this.getUserByUsername(userName);
+        user.addCities(city);
+
+        return true;
+    }
 };
 
-userRepository.getUserByUsername = async (login) => {
-    
-    let user = await db.models.User.findOne(
-      {
-        where: { userName: login },
-      });
-
-    return user;
-};
 
 
 module.exports = userRepository;

@@ -1,7 +1,9 @@
 const { check, validationResult } = require('express-validator');
 var userRepository = require('./../repository/user');
+var cityRepository = require('./../repository/city');
 const encryptionHelper = require('./../helper/encryption');
 const tokenHelper = require('./../helper/token');
+var db = require('./../models/index');
 
 const validationError= "Validation error: user or password not valid";
 
@@ -48,6 +50,20 @@ const user = {
         }catch (err){
             next(err);
         }
+    },
+
+    async cities_post(req, res, next){
+
+        try{
+
+            const user = await userRepository.getUserByUsername(req.userName);
+            await cityRepository.createCity(req.body.city, req.body.country, user);
+            //await userRepository.addCity(req.userName, city);
+
+            res.send("ok");
+        }catch (err){
+            next(err);
+        }        
     }
 }
 

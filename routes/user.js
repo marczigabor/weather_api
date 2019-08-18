@@ -19,4 +19,6 @@ router.post('/login', user_controller.login_post);
 
 router.get('/city', auth.verifyToken, user_controller.cities_get);
 
+router.post('/city', auth.verifyToken, user_controller.cities_post);
+
 module.exports = router;
