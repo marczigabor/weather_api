@@ -9,6 +9,7 @@ var auth = require('./middlewares/auth');
 var indexRouter = require('./routes/index');
 var weatherRouter = require('./routes/weather');
 var userRouter = require('./routes/user');
+var cityRouter = require('./routes/city');
 
 //var models = require('./models/index');
 var db = require('./models/index');
@@ -38,6 +39,7 @@ let apiVersion = "/api/v1";
 app.use('/', indexRouter);
 app.use(apiVersion + '/weather', auth.verifyToken, weatherRouter);
 app.use(apiVersion + '/user', userRouter);
+app.use(apiVersion + '/city', cityRouter);
 
 
 //database
