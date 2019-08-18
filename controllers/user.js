@@ -58,7 +58,6 @@ const user = {
 
             const user = await userRepository.getUserByUsername(req.userName);
             await cityRepository.createCity(req.body.city, req.body.country, user);
-            //await userRepository.addCity(req.userName, city);
 
             res.send("ok");
         }catch (err){

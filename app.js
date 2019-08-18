@@ -4,6 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
+
+var cors = require('cors')
+
 var auth = require('./middlewares/auth');
 
 var indexRouter = require('./routes/index');
@@ -11,11 +14,8 @@ var weatherRouter = require('./routes/weather');
 var userRouter = require('./routes/user');
 var cityRouter = require('./routes/city');
 
-//var models = require('./models/index');
 var db = require('./models/index');
 const encryption = require('./helper/encryption');
-
-//var Sequelize = require('Sequelize');
 
 var app = express();
 
@@ -33,6 +33,7 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(cors());
 
 let apiVersion = "/api/v1";
 
@@ -42,26 +43,12 @@ app.use(apiVersion + '/user', userRouter);
 app.use(apiVersion + '/city', cityRouter);
 
 
-//database
-
-//console.log(db);
-
-
-// db. models.sequelize.sync().then(function () {
-//   server.listen(port);
-//   server.on('error', onError);
-//   server.on('listening', onListening);
-// });
-
-
 db.sequelize.authenticate().then(() => {
   console.log("Success!");
-
   // db.sequelize.sync({ force: true }).then(()=>{
-  //   console.log("sync is done");
-  //   seed();
-  // });
- 
+  //     console.log("sync is done");
+  //     seed();
+  //   });
 }).catch((err) => {
   console.log(err);
 });
