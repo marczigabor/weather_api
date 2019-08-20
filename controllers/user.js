@@ -35,8 +35,8 @@ const user = {
             //req.session.userName = user.userName;
             const token = tokenHelper.generateToken(user.userName);
     
-            res.cookie('auth',token);
-            res.status(200).send({ token });
+            res.cookie('auth', token);
+            res.status(200).send({ userName: user.userName, token });
         }catch (err){
             next(err);
         }
