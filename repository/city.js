@@ -21,7 +21,10 @@ var cityRepository = {
         Object.getOwnPropertyNames(capitals).forEach((value)=>{
             if ((!maxNum || maxNum > i) && value.toLowerCase().includes(data)){
                 i++;
-                result.push(value);
+                result.push({
+                    city: value,
+                    country: capitals[value]
+                });
             }
         });
 

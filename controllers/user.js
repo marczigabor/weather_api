@@ -1,9 +1,8 @@
-const { check, validationResult } = require('express-validator');
+//const { check, validationResult } = require('express-validator');
 var userRepository = require('./../repository/user');
 var cityRepository = require('./../repository/city');
 const encryptionHelper = require('./../helper/encryption');
 const tokenHelper = require('./../helper/token');
-var db = require('./../models/index');
 
 const validationError= "Validation error: user or password not valid";
 
@@ -46,7 +45,8 @@ const user = {
 
         try{
             let userCities = await userRepository.findByLoginIncludeCities(req.userName);
-            res.send(userCities.Cities);
+
+            res.send(user.mapCities(userCities.Cities));
         }catch (err){
             next(err);
         }
@@ -63,8 +63,18 @@ const user = {
         }catch (err){
             next(err);
         }        
+    },
+
+    mapCities (cities){
+        let i =  cities.map((x) => {
+            return {
+                name: x.name,
+                country: x.country
+            }
+        });
+    
+        return i;
     }
 }
-
 
 module.exports = user;

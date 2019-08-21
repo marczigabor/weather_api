@@ -2,7 +2,6 @@ var request = require('request');
 var dateHelper = require('./../helper/date');
 var apiKey = '6c4651c161e482495f5bef0a0cbe7684';
 
-const that = this;
 const weather = {
 
     async weather_get(req, res, next) {

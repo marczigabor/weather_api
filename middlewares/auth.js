@@ -47,7 +47,7 @@ getBearerToken = (headers)=> {
   const token = headers['authorization'];
   if (token){
     if (token.substring(0, 7) == "Bearer "){
-      return token.substring(8);
+      return token.substring(7);
     }else{
       return token;
     }
