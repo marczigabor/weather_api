@@ -28,7 +28,8 @@ const user = {
                     throw new Error(validationError);
                 }
             }else{
-                throw new Error(validationError);
+                res.status(401).send(validationError);
+                //throw new Error(validationError);
             }
     
             //req.session.userName = user.userName;
