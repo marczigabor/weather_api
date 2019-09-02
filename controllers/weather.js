@@ -29,14 +29,14 @@ const weather = {
 getWeatherObject = (body)=> {
 
     return {
-        sunriseTime: dateHelper.getHourMinutes(dateHelper.convertUnixDate(body.sys.sunrise)),
-        sunsetTime: dateHelper.getHourMinutes(dateHelper.convertUnixDate(body.sys.sunset)),    
-        time: dateHelper.getHourMinutes(dateHelper.convertUnixDate(body.dt)),
+        sunriseTime: dateHelper.getHourMinutes(dateHelper.convertUnixDate(body.sys.sunrise, body.timezone)),
+        sunsetTime: dateHelper.getHourMinutes(dateHelper.convertUnixDate(body.sys.sunset, body.timezone)),    
+        time: dateHelper.getHourMinutes(dateHelper.convertUnixDate(body.dt, body.timezone)),
         temp: body.main.temp,     
         city: body.name,
         main: body.weather[0].main,
-        description: body.weather[0].description
-
+        description: body.weather[0].description,
+        timezone: body.timezone
     }
 }
 
