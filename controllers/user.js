@@ -9,13 +9,6 @@ const validationError= "Validation error: user or password not valid";
 const user = {
     async login_post(req, res, next) {
 
-        // check(req.body.userName).isEmail();
-        // check(req.body.password).isLength({ min: 5 });
-        // const errors = validationResult(req);
-        // if (!errors.isEmpty()) {
-        //   return res.status(422).json({ errors: errors.array() });
-        // }
-    
         try{
             const user = await userRepository.getUserByUsername(req.body.userName);
     
@@ -25,14 +18,12 @@ const user = {
                     console.log('Password is correct');
                 } else {
                     console.log('Password is wrong');
-                    throw new Error(validationError);
+                    res.status(401).send(validationError);
                 }
             }else{
                 res.status(401).send(validationError);
-                //throw new Error(validationError);
             }
     
-            //req.session.userName = user.userName;
             const token = tokenHelper.generateToken(user.userName);
     
             res.cookie('auth', token);
